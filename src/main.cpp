@@ -1,21 +1,37 @@
 #include <SFML/Graphics.hpp>
+#include <Player.h>
 
 int main()
 {
-    auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Samurai Action Game");
-    window.setFramerateLimit(144);
+    auto window = sf::RenderWindow(sf::VideoMode({320u, 240u}), "Samurai Action Game");
+    window.setFramerateLimit(60);
+
+    Player player;
+    player.initialize();
+
+    auto onWindowClose = [&window](const sf::Event::Closed&)
+    {
+        window.close();
+    };
+
+    auto onKeyPressed = [&player](const sf::Event::KeyPressed& keyPressed)
+    {
+        player.handleKeyPressed(keyPressed);
+    };
+
+    auto onKeyReleased = [&player](const sf::Event::KeyReleased& keyReleased)
+    {
+        player.handleKeyReleased(keyReleased);
+    };
 
     while (window.isOpen())
     {
-        while (const std::optional event = window.pollEvent())
-        {
-            if (event->is<sf::Event::Closed>())
-            {
-                window.close();
-            }
-        }
+        window.handleEvents(onWindowClose, onKeyPressed, onKeyReleased);
 
-        window.clear();
+        player.update();
+
+        window.clear(sf::Color::Black);
+        player.draw(window);
         window.display();
     }
 }

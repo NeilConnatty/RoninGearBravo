@@ -12,7 +12,8 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(action-game src/main.cpp)
+include_directories(include)
+add_executable(action-game src/main.cpp src/Player.cpp)
 target_compile_features(action-game PRIVATE cxx_std_17)
 target_link_libraries(action-game PRIVATE SFML::Graphics)
 
