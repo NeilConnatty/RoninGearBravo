@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <Player.h>
+#include <Map.h>
 
 int main()
 {
@@ -8,6 +9,8 @@ int main()
 
     Player player;
     player.initialize();
+    Map map;
+    map.initialize();
 
     auto onWindowClose = [&window](const sf::Event::Closed&)
     {
@@ -31,6 +34,7 @@ int main()
         player.update();
 
         window.clear(sf::Color::Black);
+        map.draw(window);
         player.draw(window);
         window.display();
     }
