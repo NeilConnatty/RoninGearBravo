@@ -1,5 +1,5 @@
-# SamuraiActionGame
+# Ronin Gear Bravo
 
-In progress C++ implementation of https://github.com/NeilConnatty/RoninPico8.
+In-progress ninja-themed stealth action game.
 
 Utilizes SFML for window management and 2d rendering: https://www.sfml-dev.org.
