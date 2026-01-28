@@ -4,24 +4,8 @@
 constexpr sf::Vector2u mapSize = {20, 15};
 constexpr sf::Vector2u tileSize = {16, 16};
 
-void initVertexArray(sf::VertexArray& vertices, const sf::Texture& tileset, const char* tilemapFilename)
-{
-    sf::FileInputStream tilemap{tilemapFilename};
-    std::optional<size_t> fileSize = tilemap.getSize();
-    std::vector<int> tiles;
-    
-    char* fileData = new char[*fileSize + 1];
-    auto success = tilemap.read(fileData, *fileSize);
-    assert(success);
-    const char* delimiters = " ,\n";
-    char* split = strtok(fileData, delimiters);
-    while (split != nullptr)
+void populateVertexArray(sf::VertexArray& vertices, const sf::Texture& tileset, const std::vector<int> tiles)
     {
-        tiles.push_back(atoi(split));
-        split = strtok(nullptr, delimiters);
-    }
-    delete [] fileData;
-
     // resize the vertex array to fit the level size
     vertices.setPrimitiveType(sf::PrimitiveType::Triangles);
     vertices.resize(mapSize.x * mapSize.y * 6);
@@ -60,10 +44,33 @@ void initVertexArray(sf::VertexArray& vertices, const sf::Texture& tileset, cons
     }
 }
 
+void populateTiles(std::vector<int>& outTiles, const char* tilemapFilename)
+{
+    sf::FileInputStream tilemap{tilemapFilename};
+    std::optional<size_t> fileSize = tilemap.getSize();
+    
+    char* fileData = new char[*fileSize + 1];
+    auto success = tilemap.read(fileData, *fileSize);
+    assert(success);
+    const char* delimiters = " ,\n";
+    char* split = strtok(fileData, delimiters);
+    while (split != nullptr)
+    {
+        outTiles.push_back(atoi(split));
+        split = strtok(nullptr, delimiters);
+    }
+    delete [] fileData;
+}
+
 void Map::initialize()
 {
-    initVertexArray(m_backgroundVertices, m_backgroundTileset, "../../assets/sprites/background-tilemap.txt");
-    initVertexArray(m_wallsVertices, m_wallsTileset, "../../assets/sprites/walls-tilemap.txt");
+    std::vector<int> tiles;
+    tiles.reserve(mapSize.x * mapSize.y);
+    populateTiles(tiles, "../../assets/sprites/background-tilemap.txt");
+    populateVertexArray(m_backgroundVertices, m_backgroundTileset, tiles);
+    tiles.clear();
+    populateTiles(tiles, "../../assets/sprites/walls-tilemap.txt");
+    populateVertexArray(m_wallsVertices, m_wallsTileset, tiles);
 }
 
 void Map::draw(sf::RenderTarget& target)
