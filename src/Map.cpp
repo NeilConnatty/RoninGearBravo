@@ -4,9 +4,9 @@
 constexpr sf::Vector2u mapSize = {20, 15};
 constexpr sf::Vector2u tileSize = {16, 16};
 
-void Map::initialize()
+void initVertexArray(sf::VertexArray& vertices, const sf::Texture& tileset, const char* tilemapFilename)
 {
-    sf::FileInputStream tilemap{"../../assets/sprites/tilemap.txt"};
+    sf::FileInputStream tilemap{tilemapFilename};
     std::optional<size_t> fileSize = tilemap.getSize();
     std::vector<int> tiles;
     
@@ -23,8 +23,8 @@ void Map::initialize()
     delete [] fileData;
 
     // resize the vertex array to fit the level size
-    m_vertices.setPrimitiveType(sf::PrimitiveType::Triangles);
-    m_vertices.resize(mapSize.x * mapSize.y * 6);
+    vertices.setPrimitiveType(sf::PrimitiveType::Triangles);
+    vertices.resize(mapSize.x * mapSize.y * 6);
 
     // populate the vertex array, with two triangles per tile
     for (unsigned int i = 0; i < mapSize.x; ++i)
@@ -35,11 +35,11 @@ void Map::initialize()
             const int tileNumber = tiles[i + j * mapSize.x];
 
             // find its position in the tileset texture
-            const int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
-            const int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);
+            const int tu = tileNumber % (tileset.getSize().x / tileSize.x);
+            const int tv = tileNumber / (tileset.getSize().x / tileSize.x);
 
             // get a pointer to the triangles' vertices of the current tile
-            sf::Vertex *triangles = &m_vertices[(i + j * mapSize.x) * 6];
+            sf::Vertex *triangles = &vertices[(i + j * mapSize.x) * 6];
 
             // define the 6 corners of the two triangles
             triangles[0].position = sf::Vector2f(i * tileSize.x, j * tileSize.y);
@@ -58,6 +58,11 @@ void Map::initialize()
             triangles[5].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
         }
     }
+}
+
+void Map::initialize()
+{
+    initVertexArray(m_vertices, m_tileset, "../../assets/sprites/tilemap.txt");
 }
 
 void Map::draw(sf::RenderTarget& target)
