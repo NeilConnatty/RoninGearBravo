@@ -62,10 +62,12 @@ void initVertexArray(sf::VertexArray& vertices, const sf::Texture& tileset, cons
 
 void Map::initialize()
 {
-    initVertexArray(m_vertices, m_tileset, "../../assets/sprites/tilemap.txt");
+    initVertexArray(m_backgroundVertices, m_backgroundTileset, "../../assets/sprites/background-tilemap.txt");
+    initVertexArray(m_wallsVertices, m_wallsTileset, "../../assets/sprites/walls-tilemap.txt");
 }
 
 void Map::draw(sf::RenderTarget& target)
 {
-    target.draw(m_vertices, sf::RenderStates{&m_tileset});
+    target.draw(m_backgroundVertices, sf::RenderStates{&m_backgroundTileset});
+    target.draw(m_wallsVertices, sf::RenderStates{&m_wallsTileset});
 }
