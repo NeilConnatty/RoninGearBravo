@@ -2,9 +2,13 @@
 #include <Player.h>
 #include <Map.h>
 
+constexpr sf::Vector2u windowResolution{sf::Vector2u{320u, 240u} * 3u};
+constexpr sf::FloatRect viewport{{0.f, 0.f}, {320.f, 240.f}};
+
 int main()
 {
-    auto window = sf::RenderWindow(sf::VideoMode({320u, 240u}), "Samurai Action Game");
+    auto window = sf::RenderWindow(sf::VideoMode(windowResolution), "Samurai Action Game");
+    window.setView(sf::View{viewport});
     window.setFramerateLimit(60);
 
     Player player;
