@@ -8,8 +8,7 @@ constexpr sf::FloatRect viewport{{0.f, 0.f}, {320.f, 240.f}};
 int main()
 {
     auto window = sf::RenderWindow(sf::VideoMode(windowResolution), "Samurai Action Game");
-    sf::View view{viewport};
-    window.setView(view);
+    window.setView(sf::View{viewport});
     window.setFramerateLimit(60);
 
     Player player;
