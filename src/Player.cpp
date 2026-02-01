@@ -54,7 +54,7 @@ void Player::update()
         direction.x -= 1;
     if (m_inputs[INPUT_RIGHT])
         direction.x += 1;
-    
+
     if (direction == sf::Vector2f{0.f, 0.f})
         return;
 
