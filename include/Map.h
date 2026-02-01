@@ -6,7 +6,10 @@ public:
     Map() = default;
 
     void initialize();
-    void draw(sf::RenderTarget& target) const;
+    void drawBackground(sf::RenderTarget& target) const;
+    void drawWalls(sf::RenderTarget& target) const;
+    void drawForeground(sf::RenderTarget& target) const;
+    void drawLighting(sf::RenderTarget& target) const;
 
     // lookup if the position in world coordinates is a wall tile
     bool checkWallCollision(sf::Vector2f point) const;

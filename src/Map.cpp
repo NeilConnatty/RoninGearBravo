@@ -125,11 +125,24 @@ void Map::populateWallBoundingBoxes(const std::vector<int>& tiles)
     }
 }
 
-void Map::draw(sf::RenderTarget& target) const
+void Map::drawBackground(sf::RenderTarget& target) const
 {
     target.draw(m_backgroundVertices, sf::RenderStates{&m_tileset});
+}
+
+void Map::drawWalls(sf::RenderTarget& target) const
+{
     target.draw(m_wallsVertices, sf::RenderStates{&m_tileset});
+}
+
+void Map::drawForeground(sf::RenderTarget& target) const
+{
     target.draw(m_foregroundVertices, sf::RenderStates{&m_tileset});
+
+}
+
+void Map::drawLighting(sf::RenderTarget& target) const
+{
     target.draw(m_lightingSprite);
 }
 
