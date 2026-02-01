@@ -65,13 +65,20 @@ void populateTiles(std::vector<int>& outTiles, const char* tilemapFilename)
 void Map::initialize()
 {
     std::vector<int> tiles;
+    
     tiles.reserve(mapSize.x * mapSize.y);
     populateTiles(tiles, "../../assets/sprites/background-tilemap.txt");
-    populateVertexArray(m_backgroundVertices, m_backgroundTileset, tiles);
+    populateVertexArray(m_backgroundVertices, m_tileset, tiles);
+    
     tiles.clear();
     populateTiles(tiles, "../../assets/sprites/walls-tilemap.txt");
-    populateVertexArray(m_wallsVertices, m_wallsTileset, tiles);
+    populateVertexArray(m_wallsVertices, m_tileset, tiles);
     populateWallBoundingBoxes(tiles);
+    
+    tiles.clear();
+    populateTiles(tiles, "../../assets/sprites/foreground-tilemap.txt");
+    populateVertexArray(m_foregroundVertices, m_tileset, tiles);
+
 }
 
 void Map::populateWallBoundingBoxes(const std::vector<int>& tiles)
@@ -83,23 +90,60 @@ void Map::populateWallBoundingBoxes(const std::vector<int>& tiles)
             // get the current tile number
             const int tileNumber = tiles[i + j * mapSize.x];
 
-            if (tileNumber == 1)
+            switch (tileNumber)
             {
-                // get a pointer to the triangles' vertices of the current tile
-                sf::FloatRect &rect = m_boundingBoxes[i][j];
-
-                // define the 6 corners of the two triangles
+            case 1:
+            case 2:
+            case 4:
+            case 13:
+            case 18:
+            {
+                sf::FloatRect& rect = m_boundingBoxes[i][j];
                 rect.position = sf::Vector2f(i * tileSize.x, j * tileSize.y);
                 rect.size = {tileSize.x, tileSize.y};
+                break;
+            }
+            case 9:
+            case 10:
+            {
+                sf::FloatRect& rect = m_boundingBoxes[i][j];
+                rect.position = sf::Vector2f(i * tileSize.x, j * tileSize.y);
+                rect.size = {tileSize.x / 2, tileSize.y};
+                break;
+            }
+            case 11:
+            case 12:
+            case 17:
+            {
+                sf::FloatRect& rect = m_boundingBoxes[i][j];
+                rect.position = sf::Vector2f((i * tileSize.x) + (tileSize.x / 2), j * tileSize.y);
+                rect.size = {tileSize.x / 2, tileSize.y};
+                break;
+            }
             }
         }
     }
 }
 
-void Map::draw(sf::RenderTarget& target) const
+void Map::drawBackground(sf::RenderTarget& target) const
 {
-    target.draw(m_backgroundVertices, sf::RenderStates{&m_backgroundTileset});
-    target.draw(m_wallsVertices, sf::RenderStates{&m_wallsTileset});
+    target.draw(m_backgroundVertices, sf::RenderStates{&m_tileset});
+}
+
+void Map::drawWalls(sf::RenderTarget& target) const
+{
+    target.draw(m_wallsVertices, sf::RenderStates{&m_tileset});
+}
+
+void Map::drawForeground(sf::RenderTarget& target) const
+{
+    target.draw(m_foregroundVertices, sf::RenderStates{&m_tileset});
+
+}
+
+void Map::drawLighting(sf::RenderTarget& target) const
+{
+    target.draw(m_lightingSprite);
 }
 
 bool Map::checkWallCollision(sf::Vector2f point) const

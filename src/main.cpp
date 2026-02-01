@@ -38,8 +38,11 @@ int main()
         player.update();
 
         window.clear(sf::Color::Black);
-        map.draw(window);
+        map.drawBackground(window);
+        map.drawWalls(window);
         player.draw(window);
+        map.drawForeground(window);
+        map.drawLighting(window);
         window.display();
     }
 }
