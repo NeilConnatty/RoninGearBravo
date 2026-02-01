@@ -65,13 +65,20 @@ void populateTiles(std::vector<int>& outTiles, const char* tilemapFilename)
 void Map::initialize()
 {
     std::vector<int> tiles;
+    
     tiles.reserve(mapSize.x * mapSize.y);
     populateTiles(tiles, "../../assets/sprites/background-tilemap.txt");
-    populateVertexArray(m_backgroundVertices, m_backgroundTileset, tiles);
+    populateVertexArray(m_backgroundVertices, m_tileset, tiles);
+    
     tiles.clear();
     populateTiles(tiles, "../../assets/sprites/walls-tilemap.txt");
-    populateVertexArray(m_wallsVertices, m_wallsTileset, tiles);
+    populateVertexArray(m_wallsVertices, m_tileset, tiles);
     populateWallBoundingBoxes(tiles);
+    
+    tiles.clear();
+    populateTiles(tiles, "../../assets/sprites/foreground-tilemap.txt");
+    populateVertexArray(m_foregroundVertices, m_tileset, tiles);
+
 }
 
 void Map::populateWallBoundingBoxes(const std::vector<int>& tiles)
@@ -98,8 +105,10 @@ void Map::populateWallBoundingBoxes(const std::vector<int>& tiles)
 
 void Map::draw(sf::RenderTarget& target) const
 {
-    target.draw(m_backgroundVertices, sf::RenderStates{&m_backgroundTileset});
-    target.draw(m_wallsVertices, sf::RenderStates{&m_wallsTileset});
+    target.draw(m_backgroundVertices, sf::RenderStates{&m_tileset});
+    target.draw(m_wallsVertices, sf::RenderStates{&m_tileset});
+    target.draw(m_foregroundVertices, sf::RenderStates{&m_tileset});
+    target.draw(m_lightingSprite);
 }
 
 bool Map::checkWallCollision(sf::Vector2f point) const
