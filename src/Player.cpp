@@ -61,7 +61,7 @@ void Player::update()
     direction = direction.normalized();
     sf::Vector2f velocity = direction * PLAYER_SPEED;
 
-    sf::FloatRect boundingBox = m_transform.transformRect(m_sprite.getGlobalBounds());
+    sf::FloatRect boundingBox = m_transform.transformRect(m_boundingBox);
 
     if (velocity.x > 0.f) // moving right, check right edge
     {
