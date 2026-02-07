@@ -3,13 +3,6 @@
 #include <Map.h>
 #include <string.h>
 
-enum TileLayers
-{
-    BACKGROUND = 0,
-    MIDGROUND = 1,
-    FOREGROUND = 2,
-    LIGHTING = 3
-};
 
 void Map::populateTileLayer(Map::TileLayer& tileLayer, const ldtk::Layer& layerDef)
 {
@@ -68,25 +61,9 @@ void Map::populateStaticColliders(const ldtk::Layer& layer)
     }
 }
 
-void Map::drawBackground(sf::RenderTarget& target) const
+void Map::drawLayer(sf::RenderTarget& target, Map::Layer layer) const
 {
-    target.draw(m_tileLayers[BACKGROUND].vertices, sf::RenderStates{&m_tileset});
-}
-
-void Map::drawWalls(sf::RenderTarget& target) const
-{
-    target.draw(m_tileLayers[MIDGROUND].vertices, sf::RenderStates{&m_tileset});
-}
-
-void Map::drawForeground(sf::RenderTarget& target) const
-{
-    target.draw(m_tileLayers[FOREGROUND].vertices, sf::RenderStates{&m_tileset});
-
-}
-
-void Map::drawLighting(sf::RenderTarget& target) const
-{
-    target.draw(m_lightingSprite);
+    target.draw(m_tileLayers[layer].vertices, sf::RenderStates{&m_tileset});
 }
 
 std::optional<sf::FloatRect> Map::checkWallCollision(sf::FloatRect box) const

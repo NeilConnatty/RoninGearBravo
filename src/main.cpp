@@ -53,11 +53,11 @@ int main()
         player.update();
 
         window.clear(sf::Color::Black);
-        map.drawBackground(window);
-        map.drawWalls(window);
+        map.drawLayer(window, Map::BACKGROUND);
+        map.drawLayer(window, Map::MIDGROUND);
         player.draw(window);
-        map.drawForeground(window);
-        map.drawLighting(window);
+        map.drawLayer(window, Map::FOREGROUND);
+        // map.drawLayer(window, Map::LIGHTING); not implemented in ldtk yet
         window.display();
     }
 }
