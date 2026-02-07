@@ -18,7 +18,7 @@ public:
     void resolveCollision(sf::FloatRect intersection);
     
 private:
-    sf::Transform m_transform{sf::Transform::Identity};
+    sf::Transform m_transform;
     std::array<bool, 4> m_inputs;
     sf::Texture m_texture{"../../assets/sprites/character.png"};
     sf::Sprite m_sprite{m_texture, {{0,0}, {16, 32}}};

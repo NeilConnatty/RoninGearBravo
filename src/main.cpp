@@ -29,9 +29,14 @@ int main()
         window.close();
     };
 
-    auto onKeyPressed = [&game](const sf::Event::KeyPressed& keyPressed)
+    auto onKeyPressed = [&game, &project](const sf::Event::KeyPressed& keyPressed)
     {
         game.handleKeyPressed(keyPressed);
+        if (keyPressed.control && keyPressed.scancode == sf::Keyboard::Scancode::R)
+        {
+            project.loadFromFile("../../assets/ldtk/roningear.ldtk");
+            game.initialize(project);
+        }
     };
 
     auto onKeyReleased = [&game](const sf::Event::KeyReleased& keyReleased)

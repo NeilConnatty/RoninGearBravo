@@ -15,6 +15,7 @@ enum PlayerInput : size_t
 
 void Player::initialize()
 {
+    m_transform = sf::Transform::Identity;
     m_transform.translate({50.f, 50.f});
     m_inputs = {false, false, false, false};
 }
