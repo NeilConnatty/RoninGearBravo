@@ -27,7 +27,7 @@ int main()
     const ldtk::Level& level = world.getLevel("Level_0");
 
     Map map;
-    map.initialize();
+    map.initialize(level);
     Player player{map};
     player.initialize();
 
