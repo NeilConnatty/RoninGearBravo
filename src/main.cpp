@@ -1,16 +1,13 @@
 #include <SFML/Graphics.hpp>
 #include <LDtkLoader/Project.hpp>
 
-#include <Player.h>
-#include <Map.h>
+#include <Game.h>
 
 constexpr sf::Vector2u windowResolution{sf::Vector2u{320u, 240u} * 3u};
-constexpr sf::FloatRect viewport{{0.f, 0.f}, {320.f, 240.f}};
 
 int main()
 {
-    auto window = sf::RenderWindow(sf::VideoMode(windowResolution), "Samurai Action Game");
-    window.setView(sf::View{viewport});
+    auto window = sf::RenderWindow(sf::VideoMode(windowResolution), "Ronin Gear Bravo");
     window.setFramerateLimit(60);
 
     ldtk::Project project;
@@ -23,41 +20,38 @@ int main()
         std::cerr << e.what() << '\n';
         return 1;
     }
-    const ldtk::World& world = project.getWorld();
-    const ldtk::Level& level = world.getLevel("Level_0");
-
-    Map map;
-    map.initialize(level);
-    Player player{map};
-    player.initialize();
+    
+    Game game;
+    game.initialize(project);
 
     auto onWindowClose = [&window](const sf::Event::Closed&)
     {
         window.close();
     };
 
-    auto onKeyPressed = [&player](const sf::Event::KeyPressed& keyPressed)
+    auto onKeyPressed = [&game, &project](const sf::Event::KeyPressed& keyPressed)
     {
-        player.handleKeyPressed(keyPressed);
+        game.handleKeyPressed(keyPressed);
+        if (keyPressed.control && keyPressed.scancode == sf::Keyboard::Scancode::R)
+        {
+            project.loadFromFile("../../assets/ldtk/roningear.ldtk");
+            game.initialize(project);
+        }
     };
 
-    auto onKeyReleased = [&player](const sf::Event::KeyReleased& keyReleased)
+    auto onKeyReleased = [&game](const sf::Event::KeyReleased& keyReleased)
     {
-        player.handleKeyReleased(keyReleased);
+        game.handleKeyReleased(keyReleased);
     };
 
     while (window.isOpen())
     {
         window.handleEvents(onWindowClose, onKeyPressed, onKeyReleased);
 
-        player.update();
+        game.update();
 
         window.clear(sf::Color::Black);
-        map.drawLayer(window, Map::BACKGROUND);
-        map.drawLayer(window, Map::MIDGROUND);
-        player.draw(window);
-        map.drawLayer(window, Map::FOREGROUND);
-        // map.drawLayer(window, Map::LIGHTING); not implemented in ldtk yet
+        game.draw(window);
         window.display();
     }
 }
