@@ -12,7 +12,7 @@ void Game::initialize(const ldtk::Project& project)
     level.initialize(levelDef, tilesets);
 
     const ldtk::EntityRef& playerData = project.getTocEntitiesByName("Player").front();
-    player.initialize(playerData);
+    player.initialize(playerData, tilesets);
 }
 
 void Game::update()
