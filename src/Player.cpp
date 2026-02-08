@@ -1,3 +1,5 @@
+#include <LDtkLoader/Entity.hpp>
+
 #include <SFML/Graphics.hpp>
 
 #include <Player.h>
@@ -13,10 +15,12 @@ enum PlayerInput : size_t
 
 #define PLAYER_SPEED 2.f // movement speed in pixels per frame
 
-void Player::initialize()
+void Player::initialize(const ldtk::EntityRef& playerData)
 {
+    m_speed = playerData->getField<float>("Speed").value();
     m_transform = sf::Transform::Identity;
-    m_transform.translate({50.f, 50.f});
+    ldtk::IntPoint worldPos = playerData->getWorldPosition();
+    m_transform.translate({static_cast<float>(worldPos.x), static_cast<float>(worldPos.y)});
     m_inputs = {false, false, false, false};
 }
 

@@ -7,7 +7,7 @@ class Player
 public:
     Player(const Level& level) : m_level(level) {}
 
-    void initialize();
+    void initialize(const ldtk::EntityRef& playerData);
     void update();
     void draw(sf::RenderTarget& target);
 
@@ -23,5 +23,6 @@ private:
     sf::Texture m_texture{"../../assets/sprites/character.png"};
     sf::Sprite m_sprite{m_texture, {{0,0}, {16, 32}}};
     sf::FloatRect m_collider{{0.f, 16.f}, {16.f, 16.f}};
+    float m_speed{0.f};
     const Level& m_level;
 };
